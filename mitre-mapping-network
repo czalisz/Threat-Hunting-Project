@@ -1,0 +1,7 @@
+#Mitre Mapping Network Examples Used
+-----------------
+T1041 - Exfiltration over C2 Channel
+T1071 - Application Layer Protocol
+T1095 - Non-Application Layer Protocol
+T1021 - Remote Services
+T1046 - Network Service Scanning
