@@ -1,3 +1,16 @@
-Network-Queries.md
 #Splunk Queries to Detect Network Connections
+---------------------------------------------
+index=* EventCode=3
+#Basic query to identify active unverified TCP/UDP communications occuring on a machine.  
 
+index=* EventCode=3 DestinationIp!=127.* AND DestinationIp!=192.168.*
+#Encapsulated within Sysmon EventCode=3 is the src/dest ip addr of communicating machines. This query attempts to dig up these connections.
+
+index=* EventCode=3 Image=*powershell*
+#Query aims to find all Sysmon network connection events made by PowerShell processes. Often linked to C2 communication. 
+
+index=* EventCode=22 QueryName=*.ru OR QueryName=*.cn
+#Sysmon Event Code=22 is the DNSEvent event from sysmon. This event allows you to monitor the query and results sent back by the DNS server as well as the process that generated the query.  
+
+index=* EventCode=3 DestinationPort=443 OR DestinationPort=80
+#Basic Query to find all HTTPS/HTTP connections to a remote machine. Often benign, could be a sign of C2 communication. 
