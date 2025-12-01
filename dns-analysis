@@ -1,2 +1,10 @@
-dns-analysis.md
+#Splunk Queries to detect suspicious DNS Queries
 ----------------
+index=* EventCode=22 QueryName="api.telegram.org"
+#Potential data exfil to a C2 server through popular encrypted messaging app Telegram. 
+
+index=* EventCode=22 QueryName="discordapp.com"
+#Potential data exfil to a C2 server through popular communication app discord. 
+
+index=* (dest_port=25 OR dest_port=465 OR dest_port=587)| stats count BY src_ip dest_ip dest_port | where count > 50 
+#Checking for repeated outbound communication with email ports from a workstation.
