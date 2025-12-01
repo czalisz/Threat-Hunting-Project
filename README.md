@@ -12,3 +12,7 @@ This real-world SOC Analysis project aims to showcase my ability to actively dis
 - MITRE ATT&CK
 - Windows 11 Pro VM
 ## Key Findings
+Successful detection of obfuscated PowerShell
+Process injection using rundll32
+Registry persistence creation
+DNS query enumeration
