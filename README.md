@@ -16,3 +16,4 @@ Successful detection of obfuscated PowerShell
 Process injection using rundll32
 Registry persistence creation
 DNS query enumeration
+Network Recon
