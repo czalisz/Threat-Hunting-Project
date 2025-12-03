@@ -1,5 +1,5 @@
 # Threat-Hunting-Project
-This real-world SOC Analysis project aims to showcase my ability to actively discover and pursue malicious activity within Splunk using Sysmon by simulating common adversarial behavior.  
+This real-world SOC Analysis project aims to showcase my ability to actively discover and pursue malicious activity within Splunk using Sysmon by rooting out common adversarial behavior as it pertains to unverified network activity/suspicious behavior.  
 ## Objective
 - Learn event log analysis
 - Build Splunk hunting queries
