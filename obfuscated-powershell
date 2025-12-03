@@ -1,0 +1,12 @@
+#obfuscated powershell detection.
+Synopsis: I executed simulated obfuscated PowerShell commands using base64 encoding and successfully detected them using Sysmon logging and Splunk queries. The detection logic was validated by identifying encoded command executions.
+
+Investigative Analysis: At 13:36:22 UTC, Sysmon Event ID 1 recorded execution of:
+powershell.exe -nop -w hidden -enc SQBFAFgA. The parent process was within root path of the Windows Powershell which is expected for this encoded command execution exercise.
+This behavior fits MITRE ATT&CK T1059.001 — Obfuscated command execution.
+
+Splunk Query Used: index=* EventCode=1 process_name="powershell.exe"
+| search CommandLine="*-enc*"
+| table _time process_name CommandLine ParentImage
+
+Lessons Learned: This exercise improved my understanding of how PowerShell is abused in real-world intrusions and reinforced the importance of command-line monitoring and parent-child process analysis. While no malicious activity was detected in this controlled environment, I hope I got to showcase my ability to discover irregular Powershell commands.  
