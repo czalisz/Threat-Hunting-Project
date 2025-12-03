@@ -3,7 +3,7 @@
 index=* EventCode=3
 #Basic query to identify active unverified TCP/UDP communications occuring on a machine.  
 
-index=* EventCode=3 DestinationIp!=127.* AND DestinationIp!=192.168.*
+index=* EventCode=3 DestinationIp!=127.* AND DestinationIp!=192.*.*
 #Encapsulated within Sysmon EventCode=3 is the src/dest ip addr of communicating machines. This query attempts to dig up these connections whilst ignoring communication between Splunk and the Splunk Forwarder.
 
 index=* EventCode=3 Image=*powershell*
