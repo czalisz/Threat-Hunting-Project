@@ -9,4 +9,15 @@ Splunk Query Used: index=* EventCode=1 process_name="powershell.exe"
 | search CommandLine="*-enc*"
 | table _time process_name CommandLine ParentImage
 
-Lessons Learned: This exercise improved my understanding of how PowerShell is abused in real-world intrusions and reinforced the importance of command-line monitoring and parent-child process analysis. While no malicious activity was detected in this controlled environment, I hope I got to showcase my ability to discover irregular Powershell commands.  
+Relevant Logs: CommandLine, ParentImage, _time, process_name
+
+Event IDs: 1
+
+MITRE ATT&CK Stages: T1059.001,T1027
+
+Risk Level: High
+Why?: Obfuscated PowerShell typically indicates purposeful evasion. In real environments legitimate admins rarely obfuscate commands so, experiencing this in real production environment indicates irregular system activity that should be investigated. 
+
+Recommended Mitigations: Principle of Least Privilege, Active Threat Hunting, Block Powershell Downgrade/Bypass
+
+Lessons Learned: This exercise improved my understanding of how PowerShell can be abused in real-world intrusions and reinforced the importance of command-line monitoring and parent-child process analysis. While no malicious activity was detected in this controlled environment, I hope I got to showcase my ability to discover irregular Powershell commands.  
