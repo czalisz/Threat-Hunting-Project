@@ -1,0 +1,22 @@
+#registry-persistence investigation example
+Synopsis: I simulated a common Windows persistence technique involving modification of registry Run keys. These keys allow programs to automatically execute during user login. I successfully created the persistence mechanism on my VM and detected it using Sysmon RegistryEvent logs and Splunk.
+
+Investigative Analysis: At 12:43:09, Sysmon Event ID 13 - Registry Value Set recorded the following registry persistence entry: 
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run\PersistentTest, C:\Windows\System32\calc.exe
+This behavior is consistent with attacker techniques where malicious programs are configured to launch automatically during user logon. This is one of the most common persistence methods in Windows compromise scenarios.
+
+Splunk Query Used: index=* EventCode=13 TargetObject="*\\CurrentVersion\\Run*"
+| table _time EventCode TargetObject Details Image
+
+Relevant Logs: TargetObject, Details, Image, _time, EventCode
+
+Event IDs: 13 - Registry Value Set
+
+MITRE ATT&CK Stages: 
+T1547.001 - Boot or Logon Autostart Executioin: Registry Run Keys
+
+Risk Level: High
+Why?: Attackers frequently use registry Run keys to maintain persistence for a variety of reasons some include: launching automatically at user logon often blending in with normal user/software behavior, not requiring advanced privileges, and often going unnoticed by an installed antivirus.
+Any unauthorized modification to Run or RunOnce keys is a strong indicator of compromise.
+
+Recommended Mitigations: 
