@@ -1,9 +1,14 @@
 #obfuscated powershell detection.
-Synopsis: I executed simulated obfuscated PowerShell commands using base64 encoding and successfully detected them using Sysmon logging and Splunk queries. The detection logic was validated by identifying encoded command executions.
+Synopsis: I simulated obfuscated PowerShell execution using Base64-encoded commands and successfully detected the activity using Sysmon Event ID 1 and Splunk. This exercise demonstrates how attackers hide malicious payloads inside encoded or obfuscated PowerShell to evade security controls.
 
-Investigative Analysis: At 13:36:22 UTC, Sysmon Event ID 1 recorded execution of:
-powershell.exe -nop -w hidden -enc SQBFAFgA. The parent process was within root path of the Windows Powershell which is expected for this encoded command execution exercise.
-This behavior fits MITRE ATT&CK T1059.001 — Obfuscated command execution.
+Investigative Analysis: At 13:36:22 UTC, Sysmon Event ID 1 recorded the following process creation: 
+powershell.exe -nop -w hidden -enc SQBFAFgA. 
+
+This command exhibited multiple signs of suspicious PowerShell behavior such as:
+-nop, disabling PowerShell profiles
+-w hidden, hiding the window
+-enc, which loads Base64-encoded content. 
+Executed from a typical Powershell parent process, but with parameters strongly associated with malicious execution. 
 
 Splunk Query Used: index=* EventCode=1 process_name="powershell.exe"
 | search CommandLine="*-enc*"
@@ -11,9 +16,11 @@ Splunk Query Used: index=* EventCode=1 process_name="powershell.exe"
 
 Relevant Logs: CommandLine, ParentImage, _time, process_name
 
-Event IDs: 1
+Event IDs: 1 - Process Creation
 
-MITRE ATT&CK Stages: T1059.001,T1027
+MITRE ATT&CK Stages: 
+T1059.001 - PowerShell to execute potential malicious payloads
+T1027 - Binary Padding (Obfuscated Files or Information)
 
 Risk Level: High
 Why?: Obfuscated PowerShell typically indicates purposeful evasion. In real environments legitimate admins rarely obfuscate commands so, experiencing this in real production environment indicates irregular system activity that should be investigated. 
