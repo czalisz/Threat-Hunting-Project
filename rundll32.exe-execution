@@ -1,0 +1,25 @@
+#rundll32.exe detection investigation example.
+Synopsis: I simulated malicious behavior involving rundll32.exe executing script-based commands and successfully detected the activity using Sysmon logging and Splunk. This exercise demonstrates how attackers abuse trusted Windows binaries (LOLbins) to evade defenses.
+
+Investigative Analysis: At 12:18:59 UTC, Sysmon Event ID 1 recorded execution of the following command: 
+Splunk Query Used: index=* Image="*\\rundll32.exe"
+| search CommandLine="*javascript*" OR CommandLine="*mshtml*" OR CommandLine="*vbscript*"
+| table _time process_name CommandLine ParentImage
+
+This behavior is highly suspicious because rundll32.exe is loading mshtml.dll to execute JavaScript, which is not expected during normal system operation. Attackers commonly use this technique to execute malicious scripts while blending in with legitimate system processes. This activity aligns with MITRE ATT&CK T1218.011 – Signed Binary Proxy Execution: Rundll32, where adversaries use Windows-signed binaries to proxy execution of malicious code.
+
+Relevant Logs: CommandLine, ParentImage, process_name, _time
+
+Event IDs: 1 - Process Creation
+
+MITRE ATT&CK Stages: 
+T1218.011 - Signed Binary Proxy Execution (rundll32)
+T1059 - Command & Scripting Behavior (JavaScript/VBScript execution)
+
+Risk Level: High
+Why?: Abuse of rundll32.exe is a common technique for malware to execute payloads without writing its own executable to disk. Rundll32 is trusted, signed by Microsoft, and often whitelisted — making detections difficult.
+Normal users and administrators rarely use rundll32 to execute scripts, so this behavior almost always indicates malicious intent.
+
+Recommended Mitigations: Enforcing application whitelisting, Monitoring command lines for unusual rundll32 activity, Principle of Least Privilege. 
+
+Lessons Learned: This exercise helped me understand how attackers can exploit trusted Windows binaries to mask malicious activity. This exercise reinforced the importance of monitoring process command line and recognizing abnormal process behaviors that deviate from legitimate system usage patterns.
