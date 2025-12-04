@@ -19,4 +19,6 @@ Risk Level: High
 Why?: Attackers frequently use registry Run keys to maintain persistence for a variety of reasons some include: launching automatically at user logon often blending in with normal user/software behavior, not requiring advanced privileges, and often going unnoticed by an installed antivirus.
 Any unauthorized modification to Run or RunOnce keys is a strong indicator of compromise.
 
-Recommended Mitigations: 
+Recommended Mitigations: Monitoring for modifications to Run and RunOnce reg keys, incorporating Sysmon with RegistryEvent auditing enabled, active threat hunting to hunt for persistence mechanisms.
+
+Lessons Learned: This exercise demonstrated how simple and stealthy registry-based persistence can be. This example shows the importance of monitoring registry autostart locations, as they remain a widely abused persistence technique in modern attacks.
