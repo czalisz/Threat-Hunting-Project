@@ -1,1 +1,33 @@
 #Network connection anomalies investigation
+Synopsis: I simulated suspicious outbound network activity from a Windows host and successfully detected the behavior using Sysmon Event ID 3 (Network Connection). This exercise demonstrates how to identify unusual external connections, which are often early indicators of command-and-control (C2) communications or data exfiltration.
+
+Investigative Analysis: At 15:12:48 UTC, Sysmon Event ID 3 – Network Connection recorded multiple outbound connections initiated from:
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+
+A certain connection of interest was:
+Destination IP: 8.8.8.8, destination Port: 4444 (nonstandard, uncommon port)
+Protocol: TCP
+Initiating Process: PowerShell
+Outbound connections to high-ports or external IPs with unusual patterns often indicate:
+Command and Control beaconing, Lateral movement, Malware staging/downloading, Suspicious enumeration or scanning.
+
+This behavior aligns with attacker network movement patterns described in MITRE ATT&CK T1041 – Exfiltration Over Command and Control Channel and T1071 – Application Layer Protocol.
+
+Splunk Query Used: index=* EventCode=3
+| stats count BY DestinationIp DestinationPort Image
+| where count > 5 AND DestinationPort > 1024
+
+Relevant Logs: SourceIp, DestinationIp, DestinationPort, Image (the process making the connection), Initiated, _time
+
+Event IDs: 3 - Network Connection
+
+MITRE ATT&CK: 
+T1071- Application Layer Protocol
+T1041- Exfiltration Over C2 Channel
+
+Risk Level: Medium-High
+Why?: Unusual connections to high numbered ports and foreign ips along with unusual outbound patterns indicate strong possibilities of C2 activity. Although these behaviors can have benign causes, they warrant immediate review.
+
+Recommended Mitigations: Monitor Sysmon Event 3, Create firewall rules blocking outbound traffic to suspicious ports, DNS logging to detect direct IP Adresses. 
+
+Lessons Learned: This exercise helped me understand how to detect early indicators of malicious network activity by analyzing Sysmon logs in Splunk. I learned how attackers often communicate with external servers through nonstandard ports or repeated beacons and how valuable network telemetry is in identifying these patterns. This reinforced the importance of monitoring outbound traffic, especially from scripting engines like PowerShell.
