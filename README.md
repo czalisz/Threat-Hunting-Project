@@ -26,7 +26,7 @@ Registry persistence creation
 DNS query enumeration
 Network recon
 
-#Limitations
+## Limitations
 While this project demonstrates practical threat hunting skills using Splunk and Sysmon, the lab environment has several inherent limitations that differ from a real-world enterprise SOC:
 Single-Host Environment - This lab uses a single Windows 11 VM as both the victim host and event-forwarding source. Because of this, the following limitations apply:
 - No lateral movement visibility
