@@ -1,7 +1,7 @@
 #Network connection anomalies investigation
 Synopsis: I simulated suspicious outbound network activity from a Windows host and successfully detected the behavior using Sysmon Event ID 3 (Network Connection). This exercise demonstrates how to identify unusual external connections, which are often early indicators of command-and-control (C2) communications or data exfiltration.
 
-Investigative Analysis: At 15:12:48 UTC, Sysmon Event ID 3 – Network Connection recorded multiple outbound connections initiated from:
+Investigative Analysis: At 8:54:08 UTC, Sysmon Event ID 3 – Network Connection recorded multiple outbound connections initiated from:
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
 
 A certain connection of interest was:
@@ -15,7 +15,7 @@ This behavior aligns with attacker network movement patterns described in MITRE 
 
 Splunk Query Used: index=* EventCode=3
 | stats count BY DestinationIp DestinationPort Image
-| where count > 5 AND DestinationPort > 1024
+| where count >= 3 AND DestinationPort > 1024
 
 Relevant Logs: SourceIp, DestinationIp, DestinationPort, Image (the process making the connection), Initiated, _time
 
